@@ -1,0 +1,255 @@
+import java.io.File
+
+class Contact(var firstName: String, var lastName: String, var phonenumber: String, var Email: String)//contact class
+{
+
+
+    fun GetContactAsString() : String //funktion som returnerar datan
+    {
+
+        return firstName + " " + lastName + " " + phonenumber + " " + Email + " "
+    }
+}
+
+class ContactList() //list klassen
+{
+
+    var contacts = mutableListOf<Contact>() //skapar listan
+
+    fun readFileLinebyLineUsingforEachLine(fileName: String) = File(fileName).forEachLine{println(it)} //läser filen
+
+    fun sort() //sorteraren som tar kontakter i kontakt listan och sedan sorterar de alfabetiskt efter namn och sedan efternamn
+    {
+        for(x in contacts.sortedWith(compareBy<Contact>{it.firstName}.thenBy{it.lastName}))
+        {
+            println(x.GetContactAsString())
+
+        }
+
+    }
+    fun AddContact(firstName: String, lastName: String, phonenumber: String, Email: String) //funktion för att skapa kontakt
+    {
+        contacts.add(Contact(firstName, lastName, phonenumber, Email))
+    }
+
+
+    fun RemoveContact(firstName: String, lastName: String)//funktion för att ta bort kontakt
+    {
+        for(x in contacts)
+        {
+            if (x.firstName == firstName && x.lastName == lastName) //letar efter kontakt som har samma namn och samma efternamn
+            {
+                contacts.remove(x)
+                break;
+            }
+
+        }
+
+    }
+
+    fun editContact (firstName: String, lastName: String, phonenumber: String, Email: String, firstName2: String, lastName2: String) //funktion för att redigera kontakt
+    {
+        for(x in contacts)
+        {
+            if (firstName2 != "")
+            {
+                contacts.find{it.firstName == firstName && it.lastName == lastName}?.firstName = firstName2  //letar efter kontakt som har samma namn och samma efternamn sedan ändrar den så att kontaktens första namn blir firstName2 vilket är kontaktens nya namn
+
+            }
+            if(lastName2 != "")
+            {
+                contacts.find{it.firstName == firstName && it.lastName == lastName}?.lastName = lastName2
+            }
+            if(phonenumber != "")
+            {
+                contacts.find{it.firstName == firstName && it.lastName == lastName}?.phonenumber = phonenumber
+            }
+            if(Email != "")
+            {
+                contacts.find{it.firstName == firstName && it.lastName == lastName}?.Email = Email
+            }
+
+
+        }
+    }
+
+
+    fun PrintAllContacts()        //skriver ut alla kontakter
+    {
+        for(x in contacts)
+        {
+            println(x.GetContactAsString())
+        }
+    }
+
+}
+fun main(args: Array<String>)
+{
+
+
+
+
+    var myContactList = ContactList()
+    myContactList.AddContact("yameb", "husen" ,"5063463284","gm@gmail.com" )
+
+    var fileName ="Phonebook.txt"             //skapar fil
+    var file = File(fileName)
+
+    //File(fileName).bufferedWriter()
+    //File(fileName).writeText()
+
+    while (true)
+    {
+        println("1 = View Contact List | 2 = Add Contact | 3 = Remove Contact | 4 = Edit contact | 5 = Show in alphabetic order | 6 = Print File | 7 = Save File")
+        var choice = readln()
+
+        if (choice == "1")
+        {
+                                    
+            myContactList.PrintAllContacts()
+
+        }
+        if (choice == "2")                            //läser av input och sparar de i variablar som sedan skickas till rätt funktion
+        {
+
+            println("name")
+            var firstName = readln()
+            println("Last name")
+            var lastName = readln()
+            println("Phonenumber")
+            var phonenumber = readln()
+            println("Email")
+            var Email = readln()
+            myContactList.AddContact(firstName,lastName,phonenumber,Email)
+            println("$firstName $lastName $phonenumber $Email was added")
+
+
+
+
+        }
+        if (choice == "3")
+        {
+            println("name")
+            var firstName = readln()
+            println("last name")
+            var lastName = readln()
+
+            myContactList.RemoveContact(firstName, lastName)
+            println("$firstName was removed")
+
+        }
+        if (choice == "4")
+        {
+            myContactList.PrintAllContacts()                   //printar alla kontakter så man ser vilken man vill ändra
+
+            while(true)
+            {
+
+
+                println("1 = Name | 2 = Last name | 3 = Phone number | 4 = Email | 5 = Exit")
+                var choice = readln()
+                if(choice == "1")
+                {
+                    println("Write the first name of the contact you want to edit")
+                    var firstName = readln()
+                    println("Write the Last name of the contact you want to edit")
+                    var lastName = readln()
+                    println("Write new first name")
+                    var firstName2 = readln()
+                    myContactList.editContact(firstName, lastName,"", "", firstName2,"")
+                    println("$firstName was changed to $firstName2")
+
+
+                }
+                if(choice == "2")
+                {
+                    println("Write the first name of the contact you want to edit")
+                    var firstName = readln()
+                    println("Write the Last name of the contact you want to edit")
+                    var lastName = readln()
+                    println("Write new Last name")
+                    var lastName2 = readln()
+                    println("$lastName was changed to $lastName2")
+
+                    myContactList.editContact(firstName, lastName, "", "","",lastName2)
+
+                }
+
+                if(choice == "3")
+                {
+                    println("Write the first name of the contact you want to edit")
+                    var firstName = readln()
+                    println("Write the Last name of the contact you want to edit")
+                    var lastName = readln()
+                    println("Write new Phone number")
+                    var phonenumber = readln()
+                    myContactList.editContact(firstName, lastName,phonenumber, "","","")
+                    println("$firstName $lastName phone number was changed to $phonenumber")
+
+
+                }
+
+                if(choice == "4")
+                {
+                    println("Write the first name of the contact you want to edit")
+                    var firstName = readln()
+                    println("Write the Last name of the contact you want to edit")
+                    var lastName = readln()
+                    println("Write new Email")
+                    var Email = readln()
+
+                    myContactList.editContact(firstName, lastName, "", Email, "","")
+                    println("$firstName $lastName Email was changed to $Email")
+
+
+
+                }
+                if(choice == "5")
+                {
+                    break;
+                }
+
+
+            }
+
+            println("What do u want to edit?")
+
+
+
+        }
+        if (choice == "5")
+        {
+            myContactList.sort()
+        }
+        if (choice == "6")
+        {
+            myContactList.readFileLinebyLineUsingforEachLine(fileName)         //kallar funktionen för att läsa av filen
+
+        }
+        if(choice == "7")
+        {
+            file.printWriter().use{out -> out.println(myContactList)}    //ska spara listan men fungerar inte :^(
+        }
+
+    }
+    
+
+             
+
+
+    
+
+    // val question= "om du vill lägga till kontakt skirv 1  om du vill ta bort kontakt skirv 2. om du vill se hela kontaktlistan skirv in 3 "
+    //if (question == "1")
+    //{
+
+    //}
+
+
+
+
+
+
+
+
+}
